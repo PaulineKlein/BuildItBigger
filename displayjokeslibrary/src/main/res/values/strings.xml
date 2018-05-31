@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">DisplayJokesLibrary</string>
+    <string name="title_activity_display_jokes">DisplayJokesActivity</string>
+    <string name="jokes">a joke</string>
+</resources>
