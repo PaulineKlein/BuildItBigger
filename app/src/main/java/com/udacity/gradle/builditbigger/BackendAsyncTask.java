@@ -16,13 +16,23 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 import java.io.IOException;
 
 //with the help of https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/77e9910911d5412e5efede5fa681ec105a0f02ad/HelloEndpoints#2-connecting-your-android-app-to-the-backend
-public class BackendAsyncTask extends AsyncTask<Context, Void, String> {
+public class BackendAsyncTask extends AsyncTask<String, Void, String> {
 
     private static MyApi myApiService = null;
-    private Context context;
+    private AsyncTaskCompleteListener<String> mlistener;
+
+    public BackendAsyncTask( AsyncTaskCompleteListener<String> listener)
+    {
+        this.mlistener = listener;
+    }
 
     @Override
-    protected String doInBackground(Context... params) {
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
+
+    @Override
+    protected String doInBackground(String... params) {
         if(myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
                     new AndroidJsonFactory(), null)
@@ -41,9 +51,6 @@ public class BackendAsyncTask extends AsyncTask<Context, Void, String> {
             myApiService = builder.build();
         }
 
-        context = params[0];
-      //  String name = params[0].second;
-
         try {
             return myApiService.sayJoke().execute().getData();
         } catch (IOException e) {
@@ -54,8 +61,7 @@ public class BackendAsyncTask extends AsyncTask<Context, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         //Toast.makeText(context, result, Toast.LENGTH_LONG).show();
-        Intent myIntent = new Intent(context, DisplayJokesActivity.class);
-        myIntent.putExtra("joke",result);
-        context.startActivity(myIntent);
+        super.onPostExecute(result);
+        mlistener.onTaskComplete(result);
     }
 }
