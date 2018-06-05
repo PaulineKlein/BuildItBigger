@@ -10,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-import com.pklein.gradle.jokes.Joker;
 import com.pklein.displayjokeslibrary.DisplayJokesActivity;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private ProgressBar mLoadingIndicator;
 
     // Only called FROM Tests : null in production.
     @Nullable
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mLoadingIndicator=findViewById(R.id.loading_indicator);
     }
 
 
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
 
+        showLoadingIndicator(true);
         new BackendAsyncTask(new FetchMyDataTaskCompleteListener()).execute();
 
         //Joker mJoker = new Joker();
@@ -75,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onTaskComplete(String myjoke)
         {
+            showLoadingIndicator(false);
             if (myjoke != null) {
                 Intent myIntent = new Intent(getApplicationContext(), DisplayJokesActivity.class);
                 myIntent.putExtra("joke",myjoke);
@@ -82,6 +87,14 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public void showLoadingIndicator(Boolean show){
+        if(show){
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+        }else{
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
         }
     }
 
