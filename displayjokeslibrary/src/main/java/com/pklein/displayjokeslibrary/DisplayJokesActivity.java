@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 public class DisplayJokesActivity extends AppCompatActivity {
 
+    private static final String EXTRA_JOKE = "joke";
     private String mJokeText;
     private TextView mtv_joke;
 
@@ -21,8 +22,8 @@ public class DisplayJokesActivity extends AppCompatActivity {
 
         Intent intentThatStarted = this.getIntent();
 
-        if (intentThatStarted.hasExtra("joke")) {
-            mJokeText = intentThatStarted.getStringExtra("joke");
+        if (intentThatStarted.hasExtra(EXTRA_JOKE)) {
+            mJokeText = intentThatStarted.getStringExtra(EXTRA_JOKE);
             mtv_joke = (TextView) findViewById(R.id.tv_joke);
             mtv_joke.setText(mJokeText);
         }

@@ -17,6 +17,7 @@ import com.pklein.displayjokeslibrary.DisplayJokesActivity;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String EXTRA_JOKE = "joke";
     private ProgressBar mLoadingIndicator;
 
     // Only called FROM Tests : null in production.
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             showLoadingIndicator(false);
             if (myjoke != null) {
                 Intent myIntent = new Intent(getApplicationContext(), DisplayJokesActivity.class);
-                myIntent.putExtra("joke",myjoke);
+                myIntent.putExtra(EXTRA_JOKE,myjoke);
                 startActivity(myIntent);
             } else {
                 Toast.makeText(getApplicationContext(), "ERROR", Toast.LENGTH_SHORT).show();
